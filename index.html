@@ -6,20 +6,84 @@
 <meta name="description" content="№48 жалпы орта білім беретін мектебінің ресми ақпараттық сайты">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#17324d;background:#f5f9fc}header{background:#fff;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px #0001}.nav{max-width:1180px;margin:auto;display:flex;align-items:center;gap:18px;padding:12px 20px}.logo{width:62px;height:62px;border-radius:50%;object-fit:cover}.brand{font-weight:800;flex:1}.links{display:flex;gap:14px;flex-wrap:wrap}.links a{color:#17324d;text-decoration:none;font-weight:600}.hero{min-height:68vh;background:linear-gradient(90deg,#082f49cc,#082f4933),url('school.jpg') center/cover;display:flex;align-items:center}.hero-in{max-width:1180px;margin:auto;width:100%;padding:60px 20px;color:white}.hero h1{font-size:clamp(36px,6vw,72px);margin:0 0 14px;max-width:850px}.hero p{font-size:20px;max-width:650px}.btn{display:inline-block;background:#f7c948;color:#17324d;padding:13px 20px;border-radius:12px;text-decoration:none;font-weight:800;margin-top:12px}.wrap{max-width:1180px;margin:auto;padding:55px 20px}.wrap h2{text-align:center;font-size:32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:30px}.card{background:white;border-radius:18px;padding:25px;box-shadow:0 8px 25px #17324d12;text-decoration:none;color:#17324d;min-height:145px}.card b{font-size:20px}.icon{font-size:34px;margin-bottom:12px}.about{display:grid;grid-template-columns:180px 1fr;gap:28px;align-items:center;background:white;border-radius:20px;padding:28px}.about img{width:160px;border-radius:50%}footer{background:#0b3b5b;color:white;text-align:center;padding:28px 20px}@media(max-width:700px){.links{display:none}.about{grid-template-columns:1fr;text-align:center}.about img{margin:auto}.hero{min-height:60vh}}
+
+.portal{background:#eaf3fa}.panel{background:#fff;padding:25px;border-radius:18px;margin:18px 0;box-shadow:0 6px 20px #17324d12}.field{display:block;width:100%;padding:12px;margin:8px 0 15px;border:1px solid #cbd9e5;border-radius:9px;font:inherit}.action{background:#0b567b;color:#fff;border:0;padding:11px 18px;border-radius:10px;cursor:pointer;font-weight:700}.action.secondary{background:#e6eef5;color:#17324d}.action.danger{background:#a63333}.action:disabled{opacity:.55}.hide{display:none!important}.item{padding:13px 0;border-bottom:1px solid #e3eaf0;overflow-wrap:anywhere}.muted{color:#64788a;font-size:14px}.notice{padding:12px;background:#fff6db;border-radius:10px;margin:12px 0}.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px}.smallbtn{padding:7px 10px;margin:4px}.nav .action{white-space:nowrap}@media(max-width:700px){.nav{flex-wrap:wrap}.brand{min-width:130px}}
+body:not(.logged-in) #home,body:not(.logged-in) #about,body:not(.logged-in) #sections,body:not(.logged-in) #contact{display:none}body:not(.logged-in) .portal{min-height:65vh}body:not(.logged-in) .links{display:none}body:not(.logged-in) #portal{padding-top:55px}body:not(.logged-in) #setup{max-width:760px;margin:auto}#status{font-weight:600} .hide{display:none!important}
 </style>
 </head>
 <body>
-<header><div class="nav"><img class="logo" src="logo.jpg" alt="№48 ЖОББМ логотипі"><div class="brand">№48 ЖОББМ</div><nav class="links"><a href="#home">Басты бет</a><a href="#about">Мектеп туралы</a><a href="#sections">Бөлімдер</a><a href="#contact">Байланыс</a></nav></div></header>
+<header><div class="nav"><img class="logo" src="logo.jpg" alt="№48 ЖОББМ логотипі"><div class="brand">№48 ЖОББМ</div><nav class="links"><a href="#home">Басты бет</a><a href="#about">Мектеп туралы</a><a href="#sections">Бөлімдер</a><a href="#contact">Байланыс</a></nav><a class="action" href="#portal" id="navLogin">Кіру</a></div></header>
 <section class="hero" id="home"><div class="hero-in"><h1>№48 жалпы орта білім беретін мектебі</h1><p>Білім, тәрбие және жаңашылдық тоғысқан бірыңғай цифрлық мектеп кеңістігі.</p><a class="btn" href="#sections">Бөлімдерді ашу</a></div></section>
 <section class="wrap" id="about"><div class="about"><img src="logo.jpg" alt="Мектеп логотипі"><div><h2 style="text-align:left;margin-top:0">Қош келдіңіздер!</h2><p>Бұл — №48 жалпы орта білім беретін мектебінің ақпараттық порталы. Мұнда мектептің сабақ кестесі, құжаттары, бұйрықтары, жоспарлары, жаңалықтары және басқа да қажетті ақпараттары бір жерге жинақталады.</p></div></div></section>
 <section class="wrap" id="sections"><h2>Мектеп порталы</h2><div class="grid">
-<a class="card" href="#"><div class="icon">📅</div><b>Сабақ кестесі</b><p>Сыныптар мен мұғалімдердің кестесі</p></a>
-<a class="card" href="#"><div class="icon">📄</div><b>Құжаттар</b><p>Word және PDF құжаттары</p></a>
-<a class="card" href="#"><div class="icon">📋</div><b>Бұйрықтар</b><p>Мектеп бойынша бұйрықтар</p></a>
-<a class="card" href="#"><div class="icon">📚</div><b>Жылдық жоспар</b><p>2026–2027 оқу жылы</p></a>
-<a class="card" href="#"><div class="icon">👩‍🏫</div><b>Мұғалімдер</b><p>Педагогтер туралы ақпарат</p></a>
-<a class="card" href="#"><div class="icon">📢</div><b>Жаңалықтар</b><p>Мектеп өміріндегі жаңалықтар</p></a>
+<a class="card" href="#portal"><div class="icon">📅</div><b>Сабақ кестесі</b><p>Сыныптар мен мұғалімдердің кестесі</p></a>
+<a class="card" href="#portal"><div class="icon">📄</div><b>Құжаттар</b><p>Word және PDF құжаттары</p></a>
+<a class="card" href="#portal"><div class="icon">📋</div><b>Бұйрықтар</b><p>Мектеп бойынша бұйрықтар</p></a>
+<a class="card" href="#portal"><div class="icon">📚</div><b>Жылдық жоспар</b><p>2026–2027 оқу жылы</p></a>
+<a class="card" href="#portal"><div class="icon">👩‍🏫</div><b>Мұғалімдер</b><p>Педагогтер туралы ақпарат</p></a>
+<a class="card" href="#portal"><div class="icon">📢</div><b>Жаңалықтар</b><p>Мектеп өміріндегі жаңалықтар</p></a>
 </div></section>
+<section class="wrap portal" id="portal"><h2>Электрондық кабинет</h2>
+<div id="setup" class="notice">Жүйені іске қосу үшін Firebase параметрлерін қосу керек. Нұсқаулық бірге берілген.</div>
+<div id="authPanel" class="panel"><h3>Жеке кабинетке кіру</h3><form id="loginForm"><label>Электрондық пошта<input class="field" id="email" type="email" required autocomplete="username"></label><label>Құпиясөз<input class="field" id="password" type="password" required autocomplete="current-password"></label><button class="action" type="submit">Кіру</button></form></div>
+<div id="privatePanel" class="hide"><div class="panel"><strong id="who"></strong> <span id="roleLabel" class="muted"></span><button class="action secondary" id="logout" style="float:right">Шығу</button></div>
+<div class="cols"><div class="panel"><h3>Мектеп әкімшілігі</h3><div id="adminsList"></div></div><div class="panel"><h3>Мұғалімдер тізімі</h3><div id="teachersList"></div></div></div>
+<div class="panel"><h3>Менің деректерім</h3><form id="profileForm"><label>Аты-жөні<input class="field" id="fullName" required maxlength="120"></label><label>Пәні немесе лауазымы<input class="field" id="subject" maxlength="120"></label><label>Тізімдегі бөлімі<select class="field" id="group"><option value="teacher">Мұғалім</option><option value="administration">Мектеп әкімшілігі</option></select></label><button class="action" type="submit">Сақтау</button></form><p class="muted">Әкімші басқа қызметкерлердің мәліметтерін Firebase басқару панелі арқылы да реттей алады.</p></div>
+<div class="panel"><h3>Құжат жүктеу</h3><form id="uploadForm"><label>Құжат атауы<input class="field" id="docTitle" required maxlength="150"></label><label>Бөлім<select class="field" id="docCategory"><option>Құжаттар</option><option>Бұйрықтар</option><option>Жылдық жоспар</option><option>Сабақ кестесі</option></select></label><label>Файл (PDF, Word, Excel)<input class="field" id="docFile" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required></label><button class="action" type="submit" id="uploadBtn">Жүктеу</button></form><p class="muted">Ең үлкен файл: 20 МБ. Барлық тіркелген қызметкерлер қарай алады.</p></div>
+<div class="panel"><h3>Ортақ құжаттар</h3><label>Бөлімді таңдау<select class="field" id="categoryFilter"><option value="">Барлығы</option><option>Құжаттар</option><option>Бұйрықтар</option><option>Жылдық жоспар</option><option>Сабақ кестесі</option></select></label><div id="documentsList"></div></div>
+<div id="adminPanel" class="panel hide"><h3>Әкімші бөлімі</h3><p>Жаңа мұғалімнің аккаунтын Firebase Authentication арқылы ашыңыз. Пайдаланушылар тізімін осы панельден көре аласыз.</p><div id="adminUsers"></div></div></div>
+<p id="status" role="status"></p></section>
 <section class="wrap" id="contact"><h2>Байланыс</h2><p style="text-align:center">Мектептің мекенжайы, телефоны және электрондық поштасы осы бөлімге енгізіледі.</p></section>
 <footer>© 2026 №48 жалпы орта білім беретін мектебі</footer>
-</body></html>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { getFirestore, doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+const firebaseConfig = {
+  apiKey: 'AIzaSyAOeS71_A3zu-PlZ5gTJVbomfeRaitHFTY',
+  authDomain: 'mektep48-36dca.firebaseapp.com',
+  projectId: 'mektep48-36dca',
+  storageBucket: 'mektep48-36dca.firebasestorage.app',
+  messagingSenderId: '543329562127',
+  appId: '1:543329562127:web:bced0f6f0b2a17faa4fd7a'
+};
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
+const $=id=>document.getElementById(id);
+const safe=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const message=t=>$('status').textContent=t;
+$('setup').textContent='Құжат файлдарын жүктеу әзірге қосылмаған. Бұл — логин арқылы кіруді тексеруге арналған нұсқа.';
+$('uploadForm').closest('.panel').innerHTML='<h3>Құжат жүктеу</h3><p>Файл сақтау қызметі қауіпсіз түрде қосылғаннан кейін іске қосылады. Әзірге нақты құжат жүктемеңіз.</p>';
+$('profileForm').querySelector('button[type="submit"]')?.setAttribute('disabled','true');
+$('profileForm').addEventListener('submit',e=>{e.preventDefault();message('Профильді өзгерту функциясы келесі кезеңде қосылады.');});
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();message('Тексеріліп жатыр...');try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);$('password').value='';message('');}catch(e){message('Кіру мүмкін болмады. Электрондық пошта мен парольді тексеріңіз.');}});
+$('logout').addEventListener('click',()=>signOut(auth));
+$('categoryFilter').addEventListener('change',()=>renderDocs());
+let documents=[];
+function renderDocs(){const category=$('categoryFilter').value;const filtered=documents.filter(d=>!category||d.category===category);$('documentsList').innerHTML=filtered.map(d=>'<div class="item"><strong>'+safe(d.title)+'</strong><div class="muted">'+safe(d.category||'Құжат')+' · '+safe(d.ownerName||'Мұғалім')+'</div><small>Файлды ашу сақтау жүйесі қосылғаннан кейін қолжетімді болады.</small></div>').join('')||'Әзірге құжаттар жоқ.';}
+onAuthStateChanged(auth,async user=>{
+  document.body.classList.toggle('logged-in',!!user);
+  $('authPanel').classList.toggle('hide',!!user);
+  $('privatePanel').classList.toggle('hide',!user);
+  $('navLogin').textContent=user?'Кабинет':'Кіру';
+  if(!user){message('');return;}
+  $('who').textContent=user.email;
+  $('roleLabel').textContent='';
+  try{
+    const profile=await getDoc(doc(db,'users',user.uid));
+    const admin=profile.exists()&&profile.data().role==='admin';
+    $('roleLabel').textContent=admin?'(Әкімші)':'(Мұғалім)';
+    $('adminPanel').classList.toggle('hide',!admin);
+    $('fullName').value=profile.data()?.name||'';
+    $('subject').value=profile.data()?.subject||'';
+    $('group').value=profile.data()?.group||'teacher';
+    for(const id of ['fullName','subject','group'])$(id).disabled=true;
+    const people=(await getDocs(collection(db,'users'))).docs.map(d=>d.data());
+    const item=p=>'<div class="item"><strong>'+safe(p.name||p.email||'Тіркелген пайдаланушы')+'</strong><div class="muted">'+safe(p.subject||'')+'</div></div>';
+    $('adminsList').innerHTML=people.filter(p=>p.group==='administration').map(item).join('')||'Тізім әлі толтырылмаған.';
+    $('teachersList').innerHTML=people.filter(p=>p.group!=='administration'&&p.role!=='admin').map(item).join('')||'Тізім әлі толтырылмаған.';
+    $('adminUsers').innerHTML=admin?people.map(item).join('')||'Пайдаланушылар жоқ':'';
+    documents=(await getDocs(collection(db,'documents'))).docs.map(d=>d.data());renderDocs();
+    message('Жүйеге сәтті кірдіңіз.');
+  }catch(e){message('Кіру орындалды, бірақ деректерді оқу мүмкін болмады: '+e.message);}
+});
+</script></body></html>
