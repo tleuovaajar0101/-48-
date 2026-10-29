@@ -102,7 +102,33 @@ async function openFolder(section,folder){
  form.onsubmit=async e=>{e.preventDefault();save.disabled=true;const record={section,folder,createdBy:current.uid,createdAt:serverTimestamp()};for(const [k] of fieldSpecs[section])record[k]=form.elements.namedItem(k).value.trim();try{await addDoc(collection(db,'schoolLists'),record);form.reset();await load();message('Мәлімет сақталды.')}catch(err){message('Сақтау қатесі: '+err.message)}finally{save.disabled=false}};
  await load();
 }
-portalSections.forEach((x,i)=>{const b=document.createElement('button');b.type='button';b.className='dashcard';b.innerHTML='<span style="font-size:26px">'+x[0]+'</span><strong>'+x[1]+'</strong><span class="muted">Бөлімді ашу ›</span>';b.onclick=()=>{ if(i<3){const groupIds=['adminsList','specialistsList','teachersList'];const groupNames=['Мектеп әкімшілігі','Мамандар','Мұғалімдер'];const groupDetails=document.querySelector('#'+groupIds[i]).closest('details');groupDetails.open=true;groupDetails.scrollIntoView({behavior:'smooth',block:'start'});$('sectionDetail').classList.add('hide');message(groupNames[i]+' тізімі ашылды. Қызметкерді таңдаңыз.');return;} $('sectionHeading').textContent=x[0]+' '+x[1];$('sectionFolders').replaceChildren();folderBox.classList.add('hide');x[2].forEach(t=>{const v=document.createElement('button');v.type='button';v.className='foldertile';v.style.cssText='border:1px solid #dbe8f1;text-align:left;cursor:pointer;font:inherit;color:inherit';v.textContent='📁 '+t;v.onclick=()=>{if(managedSections.has(x[1]))openFolder(x[1],t);else message('Бұл папкаға құжатты төмендегі жүктеу формасынан қосуға болады.')};$('sectionFolders').append(v)});$('sectionHint').textContent=i===1||i===2?'Оқушылардың жеке папкалары тек рұқсат берілген қызметкерлерге ашылуы тиіс. Қауіпсіздік ережелері дайын болғанша мұнда оқушы деректерін енгізбеңіз.':managedSections.has(x[1])?'Папканы басыңыз. Әкімші тізімге мәлімет қосып, өңдей және өшіре алады.':'Дайын құжаттарды төмендегі «Құжат жүктеу» формасынан тиісті санатқа енгізуге болады.';$('sectionDetail').classList.remove('hide');$('sectionDetail').scrollIntoView({behavior:'smooth',block:'nearest'});};$('dashboard').append(b);});
+const staffDashboardFolders={
+ 'Мектеп әкімшілігі':['Қызметкерлер тізімі','Бұйрықтар','Жылдық жоспарлар','Есептер мен анықтамалар','Мониторинг','Жеке құжаттар'],
+ 'Мамандар':['Мамандар тізімі','Жеке құжаттар','Жұмыс жоспарлары','Есептер мен анықтамалар'],
+ 'Мұғалімдер':['Пәндер бойынша мұғалімдер','КТЖ','Жеке құжаттар','Құжаттарды тексеру нәтижелері']
+};
+function showDashboardStaff(group,folder){
+ folderBox.classList.remove('hide');folderBox.replaceChildren();
+ const title=document.createElement('h4');title.textContent='📁 '+folder;folderBox.append(title);
+ const staff=people.filter(p=>(p.group||'teacher')===group&&p.role!=='admin');
+ if(folder.includes('тізімі')||folder==='Пәндер бойынша мұғалімдер'){
+  if(!staff.length){const empty=document.createElement('p');empty.textContent='Қызметкерлер тізімі әлі енгізілмеген.';folderBox.append(empty);}
+  staff.forEach(p=>{const btn=document.createElement('button');btn.className='item person';btn.type='button';const name=document.createElement('strong');name.textContent=p.name||p.email||'Қызметкер';const position=document.createElement('div');position.className='muted';position.textContent=p.subject||'';btn.append(name,position);btn.onclick=()=>openStaffPerson(p);folderBox.append(btn);});
+ }else{
+  const note=document.createElement('p');note.className='muted';note.textContent='Қызметкерді таңдасаңыз, оның жеке әкімшілік немесе мұғалімдік папкалары ашылады.';folderBox.append(note);
+  if(!staff.length){const empty=document.createElement('p');empty.textContent='Әзірге қызметкерлер жоқ.';folderBox.append(empty);}
+  staff.forEach(p=>{const btn=document.createElement('button');btn.type='button';btn.className='item person';btn.textContent='📁 '+(p.name||p.email||'Қызметкер')+' — '+(p.subject||'');btn.onclick=()=>openStaffPerson(p);folderBox.append(btn);});
+ }
+ folderBox.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function openStaffPerson(p){selectedUid=p.source+':'+p.id;$('personTitle').textContent=p.name||'Қызметкер';$('personPosition').textContent=(p.subject||'')+(p.teachingSubject?' · '+p.teachingSubject:'')+(p.source==='staff'?' · Аккаунт байланыстырылмаған':'');$('personPanel').classList.remove('hide');renderPersonFolders();$('personPanel').scrollIntoView({behavior:'smooth',block:'nearest'});}
+portalSections.forEach((x,i)=>{const b=document.createElement('button');b.type='button';b.className='dashcard';b.innerHTML='<span style="font-size:26px">'+x[0]+'</span><strong>'+x[1]+'</strong><span class="muted">Бөлімді ашу ›</span>';b.onclick=()=>{
+ $('sectionHeading').textContent=x[0]+' '+x[1];$('sectionFolders').replaceChildren();folderBox.classList.add('hide');
+ const staffGroup=['administration','specialist','teacher'][i];const folders=i<3?staffDashboardFolders[x[1]]:x[2];
+ folders.forEach(t=>{const v=document.createElement('button');v.type='button';v.className='foldertile';v.style.cssText='border:1px solid #dbe8f1;text-align:left;cursor:pointer;font:inherit;color:inherit';v.textContent='📁 '+t;v.onclick=()=>{if(i<3)showDashboardStaff(staffGroup,t);else if(managedSections.has(x[1]))openFolder(x[1],t);else message('Бұл папкаға құжатты төмендегі жүктеу формасынан қосуға болады.')};$('sectionFolders').append(v)});
+ $('sectionHint').textContent=i<3?'Папканы басып, қызметкерді таңдаңыз. Әр қызметкердің жеке құжат папкалары ашылады.':i===4||i===5?'Оқушылардың жеке папкалары тек рұқсат берілген қызметкерлерге ашылуы тиіс. Қауіпсіздік ережелері дайын болғанша мұнда оқушы деректерін енгізбеңіз.':managedSections.has(x[1])?'Папканы басыңыз. Әкімші тізімге мәлімет қосып, өңдей және өшіре алады.':'Дайын құжаттарды төмендегі «Құжат жүктеу» формасынан тиісті санатқа енгізуге болады.';
+ $('sectionDetail').classList.remove('hide');$('sectionDetail').scrollIntoView({behavior:'smooth',block:'nearest'});
+};$('dashboard').append(b);});
 $('sectionClose').onclick=()=>{$('sectionDetail').classList.add('hide');folderBox.classList.add('hide');};
 document.querySelectorAll('[data-section]').forEach(link=>link.addEventListener('click',()=>{const index=link.dataset.section==='home'?4:5; if(current){setTimeout(()=>document.querySelectorAll('#dashboard .dashcard')[index]?.click(),120);}}));
 const canEdit=d=>current&&(admin||d.ownerId===current.uid);
