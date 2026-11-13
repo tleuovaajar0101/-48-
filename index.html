@@ -75,14 +75,15 @@ const portalSections=[
 ['🍲','Ыстық тамақ',['Тамақтанатын оқушылар тізімі','1 ауысым','2 ауысым','Тамақтану уақыты']],
 ['🗓️','Айлықтар',['Айлық жоспарлар','Айлық іс-шаралар','Есептер']]
 ];
-const managedSections=new Set(['Үйірмелер','Тасымалдау (подвоз)','Ыстық тамақ','Айлықтар']);
+const managedSections=new Set(['Үйірмелер','Тасымалдау (подвоз)','Ыстық тамақ','Жас мамандар','Мектепішілік іс-шаралар жоспары']);
 let activeSection='',activeFolder='';
 const folderBox=$('folderRecords');
 const fieldSpecs={
  'Үйірмелер':[['name','Аты-жөні / құжат атауы','text'],['className','Сыныбы / үйірме атауы','text'],['leader','Үйірме жетекшісі','text'],['notes','Қосымша мәлімет / КТЖ сілтемесі','text']],
  'Тасымалдау (подвоз)':[['name','Оқушының аты-жөні','text'],['className','Сыныбы','text'],['shift','Ауысым (1 немесе 2)','select'],['arrival','Келу уақыты','time'],['departure','Қайту уақыты','time']],
  'Ыстық тамақ':[['name','Оқушының аты-жөні','text'],['className','Сыныбы','text'],['shift','Ауысым (1 немесе 2)','select'],['mealTime','Тамақтану уақыты','time']],
- 'Айлықтар':[['name','Жоспар / іс-шара атауы','text'],['month','Айы','month'],['notes','Сипаттамасы / құжат сілтемесі','text']]
+ 'Жас мамандар':[['name','Жас маман / құжат атауы','text'],['className','Пәні / бағыты','text'],['leader','Тәлімгері / жауапты қызметкер','text'],['notes','Жоспар, қорытынды немесе қосымша мәлімет','text']],
+ 'Мектепішілік іс-шаралар жоспары':[['name','Жоспар / іс-шара атауы','text'],['month','Айы','month'],['notes','Сипаттамасы / құжат сілтемесі','text']]
 };
 async function openFolder(section,folder){
  activeSection=section;activeFolder=folder;folderBox.classList.remove('hide');folderBox.replaceChildren();
@@ -96,7 +97,7 @@ async function openFolder(section,folder){
  }
  const save=document.createElement('button');save.type='submit';save.className='action';save.textContent='➕ Тізімге қосу';form.append(save);folderBox.append(form);
  const listing=document.createElement('div');listing.textContent='Тізім жүктелуде...';folderBox.append(listing);
- async function load(){listing.replaceChildren();try{const snap=await getDocs(collection(db,'schoolLists'));const records=snap.docs.filter(d=>d.data().section===section&&d.data().folder===folder);if(!records.length)listing.textContent='Бұл тізімге әлі мәлімет қосылмаған.';
+ async function load(){listing.replaceChildren();try{const snap=await getDocs(collection(db,'schoolLists'));const records=snap.docs.filter(d=>(d.data().section===section||(section==='Мектепішілік іс-шаралар жоспары'&&d.data().section==='Айлықтар'))&&d.data().folder===folder);if(!records.length)listing.textContent='Бұл тізімге әлі мәлімет қосылмаған.';
  for(const entry of records){const data=entry.data();const line=document.createElement('div');line.className='item';const title=document.createElement('strong');title.textContent=data.name||'Жазба';line.append(title);const desc=document.createElement('div');desc.className='muted';desc.textContent=fieldSpecs[section].filter(([k])=>k!=='name'&&data[k]).map(([k,l])=>l+': '+data[k]).join(' · ');line.append(desc);const edit=document.createElement('button');edit.type='button';edit.className='action secondary smallbtn';edit.textContent='Өңдеу';edit.onclick=async()=>{const updates={};for(const [k,l] of fieldSpecs[section]){const val=prompt(l,data[k]||'');if(val===null)return;updates[k]=val.trim();}if(!updates.name){message('Атауы бос болмауы керек.');return;}try{await updateDoc(doc(db,'schoolLists',entry.id),updates);await load();message('Мәлімет өзгертілді.')}catch(e){message('Өңдеу қатесі: '+e.message)}};const del=document.createElement('button');del.type='button';del.className='action danger smallbtn';del.textContent='Өшіру';del.onclick=async()=>{if(!confirm('Осы жазбаны өшіреміз бе?'))return;try{await deleteDoc(doc(db,'schoolLists',entry.id));await load();message('Жазба өшірілді.')}catch(e){message('Өшіру қатесі: '+e.message)}};line.append(edit,del);listing.append(line)}
  }catch(e){listing.textContent='Тізімді ашу мүмкін болмады. Firebase рұқсаттарын тексеріңіз.';message(e.message)}}
  form.onsubmit=async e=>{e.preventDefault();save.disabled=true;const record={section,folder,createdBy:current.uid,createdAt:serverTimestamp()};for(const [k] of fieldSpecs[section])record[k]=form.elements.namedItem(k).value.trim();try{await addDoc(collection(db,'schoolLists'),record);form.reset();await load();message('Мәлімет сақталды.')}catch(err){message('Сақтау қатесі: '+err.message)}finally{save.disabled=false}};
@@ -126,7 +127,7 @@ portalSections.forEach((x,i)=>{const b=document.createElement('button');b.type='
  $('sectionHeading').textContent=x[0]+' '+x[1];$('sectionFolders').replaceChildren();folderBox.classList.add('hide');
  const staffGroup=['administration','specialist','teacher'][i];const folders=i<3?staffDashboardFolders[x[1]]:x[2];
  folders.forEach(t=>{const v=document.createElement('button');v.type='button';v.className='foldertile';v.style.cssText='border:1px solid #dbe8f1;text-align:left;cursor:pointer;font:inherit;color:inherit';v.textContent='📁 '+t;v.onclick=()=>{if(i<3)showDashboardStaff(staffGroup,t);else if(managedSections.has(x[1]))openFolder(x[1],t);else message('Бұл папкаға құжатты төмендегі жүктеу формасынан қосуға болады.')};$('sectionFolders').append(v)});
- $('sectionHint').textContent=i<3?'Папканы басып, қызметкерді таңдаңыз. Әр қызметкердің жеке құжат папкалары ашылады.':i===4||i===5?'Оқушылардың жеке папкалары тек рұқсат берілген қызметкерлерге ашылуы тиіс. Қауіпсіздік ережелері дайын болғанша мұнда оқушы деректерін енгізбеңіз.':managedSections.has(x[1])?'Папканы басыңыз. Әкімші тізімге мәлімет қосып, өңдей және өшіре алады.':'Дайын құжаттарды төмендегі «Құжат жүктеу» формасынан тиісті санатқа енгізуге болады.';
+ $('sectionHint').textContent=i<3?'Папканы басып, қызметкерді таңдаңыз. Әр қызметкердің жеке құжат папкалары ашылады.':(x[1]==='Үйде оқыту'||x[1]==='Инклюзивті білім беру')?'Оқушылардың жеке папкалары тек рұқсат берілген қызметкерлерге ашылуы тиіс. Қауіпсіздік ережелері дайын болғанша мұнда оқушы деректерін енгізбеңіз.':managedSections.has(x[1])?'Папканы басыңыз. Әкімші тізімге мәлімет қосып, өңдей және өшіре алады.':'Дайын құжаттарды төмендегі «Құжат жүктеу» формасынан тиісті санатқа енгізуге болады.';
  $('sectionDetail').classList.remove('hide');if(i<3){showDashboardStaff(staffGroup,folders[0]);} $('sectionDetail').scrollIntoView({behavior:'smooth',block:'nearest'});
 };$('dashboard').append(b);});
 $('sectionClose').onclick=()=>{$('sectionDetail').classList.add('hide');folderBox.classList.add('hide');};
